@@ -14,10 +14,12 @@ import { Resizable } from "re-resizable"
 import { Button } from "./components/ui/button"
 import { ResetIcon } from "@radix-ui/react-icons"
 import WidthMeasurement from "./components/WidthMeasurement"
+import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons"
 
 function App() {
   const [width, setWidth] = useState("auto")
   const [showWidth, setShowWidth] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const theme = useStore((state) => state.theme)
   const padding = useStore((state) => state.padding)
@@ -42,7 +44,7 @@ function App() {
   }, [])
 
   return (
-    <main className="dark min-h-screen flex flex-col lg:flex-row justify-center items-center bg-neutral-950 text-white p-4">
+    <main className="dark min-h-screen bg-neutral-950 text-white">
       <link
         rel="stylesheet"
         href={themes[theme].theme}
@@ -54,15 +56,41 @@ function App() {
         crossOrigin="anonymous"
       />
 
-      {/* Floating Sidebar - Made responsive */}
-      <div className="w-full lg:fixed lg:left-4 lg:top-4 lg:bottom-4 lg:w-64 bg-neutral-900/50 backdrop-blur-md rounded-lg shadow-lg overflow-hidden mb-4 lg:mb-0">
+      {/* Mobile Menu Button */}
+      <button 
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="lg:hidden fixed top-4 right-4 z-50 p-2 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-colors"
+      >
+        {isMobileMenuOpen ? (
+          <Cross1Icon className="w-6 h-6" />
+        ) : (
+          <HamburgerMenuIcon className="w-6 h-6" />
+        )}
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Fixed on desktop, sliding on mobile */}
+      <div className={cn(
+        "fixed lg:w-72 bg-neutral-900/50 backdrop-blur-md shadow-lg overflow-hidden z-40",
+        // Desktop styles
+        "lg:left-4 lg:top-4 lg:bottom-4 lg:translate-x-0",
+        // Mobile styles
+        "w-[280px] top-0 bottom-0 transition-transform duration-300",
+        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
         <div className="h-full overflow-y-auto px-4 py-6 flex flex-col gap-6">
           <h2 className="text-xl font-semibold text-center mb-4">Code Editor Settings</h2>
           <ThemeSelect />
           <LanguageSelect />
           <FontSelect />
           <FontSizeInput />
-
           <BackgroundSwitch />
           <DarkModeSwitch />
           <div className="w-full h-px bg-neutral-700 my-2" />
@@ -70,41 +98,42 @@ function App() {
         </div>
       </div>
 
-      {/* Main Content - Made responsive */}
-      <Resizable
-        enable={{ left: true, right: true }}
-        minWidth={Math.min(padding * 2 + 400, window.innerWidth - 32)} // Adjust minWidth for mobile
-        size={{ width }}
-        onResize={(e, dir, ref) => setWidth(ref.offsetWidth)}
-        onResizeStart={() => setShowWidth(true)}
-        onResizeStop={() => setShowWidth(false)}
-        className="w-full lg:ml-72" // Add margin to account for sidebar on desktop
-      >
-        <div
-          className={cn(
-            "overflow-hidden mb-2 transition-all ease-out max-w-full",
-            showBackground ? themes[theme].background : "ring ring-neutral-900"
-          )}
-          style={{ padding: Math.min(padding, window.innerWidth * 0.1) }} // Adjust padding for smaller screens
-          ref={editorRef}
+      {/* Main Content Area */}
+      <div className={cn(
+        "min-h-screen transition-all duration-300",
+        // Desktop styles
+        "lg:pl-80 flex items-center justify-center",
+        // Mobile styles
+        "p-4 pt-16", // Added top padding for mobile to account for menu button
+        isMobileMenuOpen ? "opacity-50" : "opacity-100"
+      )}>
+        <Resizable
+          enable={{ left: true, right: true }}
+          minWidth={Math.min(padding * 2 + 400, window.innerWidth - 32)}
+          maxWidth={Math.min(1200, window.innerWidth - (window.innerWidth > 1024 ? 350 : 32))}
+          size={{ width }}
+          onResize={(e, dir, ref) => setWidth(ref.offsetWidth)}
+          onResizeStart={() => setShowWidth(true)}
+          onResizeStop={() => setShowWidth(false)}
+          className="w-full lg:w-auto"
         >
-          <CodeEditor />
-        </div>
-        <WidthMeasurement showWidth={showWidth} width={width} />
-        <div
-          className={cn(
-            "transition-opacity w-fit mx-auto -mt-4",
-            showWidth || width === "auto"
-              ? "invisible opacity-0"
-              : "visible opacity-100"
+          <div
+            className={cn(
+              "overflow-hidden mb-2 transition-all ease-out",
+              showBackground ? themes[theme].background : "ring ring-neutral-900"
+            )}
+            style={{ padding }}
+            ref={editorRef}
+          >
+            <CodeEditor />
+          </div>
+          {showWidth && (
+            <div className="text-center text-sm text-neutral-500">
+              {width}px
+            </div>
           )}
-        >
-          <Button size="sm" onClick={() => setWidth("auto")} variant="ghost">
-            <ResetIcon className="mr-2" />
-            Reset width
-          </Button>
-        </div>
-      </Resizable>
+        </Resizable>
+      </div>
     </main>
   )
 }
