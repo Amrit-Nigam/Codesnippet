@@ -103,12 +103,10 @@ export default function ExportOptions({ targetRef }) {
         <DropdownMenuItem className="gap-2" onClick={copyImage}>
           <ImageIcon />
           Copy Image
-          <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem className="gap-2" onClick={copyLink}>
           <Link2Icon />
           Copy Link
-          <DropdownMenuShortcut>⇧⌘C</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -117,7 +115,6 @@ export default function ExportOptions({ targetRef }) {
         >
           <DownloadIcon />
           Save as PNG
-          <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="gap-2"
@@ -125,7 +122,6 @@ export default function ExportOptions({ targetRef }) {
         >
           <DownloadIcon />
           Save as SVG
-          <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
