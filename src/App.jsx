@@ -42,7 +42,7 @@ function App() {
   }, [])
 
   return (
-    <main className="dark min-h-screen flex justify-center items-center bg-neutral-950 text-white">
+    <main className="dark min-h-screen flex flex-col lg:flex-row justify-center items-center bg-neutral-950 text-white p-4">
       <link
         rel="stylesheet"
         href={themes[theme].theme}
@@ -54,8 +54,8 @@ function App() {
         crossOrigin="anonymous"
       />
 
-      {/* Floating Sidebar */}
-      <div className="fixed left-4 top-4 bottom-4 w-64 bg-neutral-900/50 backdrop-blur-md rounded-lg shadow-lg overflow-hidden">
+      {/* Floating Sidebar - Made responsive */}
+      <div className="w-full lg:fixed lg:left-4 lg:top-4 lg:bottom-4 lg:w-64 bg-neutral-900/50 backdrop-blur-md rounded-lg shadow-lg overflow-hidden mb-4 lg:mb-0">
         <div className="h-full overflow-y-auto px-4 py-6 flex flex-col gap-6">
           <h2 className="text-xl font-semibold text-center mb-4">Code Editor Settings</h2>
           <ThemeSelect />
@@ -70,21 +70,22 @@ function App() {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content - Made responsive */}
       <Resizable
         enable={{ left: true, right: true }}
-        minWidth={padding * 2 + 400}
+        minWidth={Math.min(padding * 2 + 400, window.innerWidth - 32)} // Adjust minWidth for mobile
         size={{ width }}
         onResize={(e, dir, ref) => setWidth(ref.offsetWidth)}
         onResizeStart={() => setShowWidth(true)}
         onResizeStop={() => setShowWidth(false)}
+        className="w-full lg:ml-72" // Add margin to account for sidebar on desktop
       >
         <div
           className={cn(
-            "overflow-hidden mb-2 transition-all ease-out",
+            "overflow-hidden mb-2 transition-all ease-out max-w-full",
             showBackground ? themes[theme].background : "ring ring-neutral-900"
           )}
-          style={{ padding }}
+          style={{ padding: Math.min(padding, window.innerWidth * 0.1) }} // Adjust padding for smaller screens
           ref={editorRef}
         >
           <CodeEditor />
