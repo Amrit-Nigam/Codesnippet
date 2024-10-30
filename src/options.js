@@ -93,6 +93,32 @@ export const themes = {
     theme:
       "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/ashes.min.css",
   },
+
+forest: {
+  background: "bg-gradient-to-br from-green-400 to-green-700",
+  theme:
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/agate.min.css",
+},
+sunset: {
+  background: "bg-gradient-to-br from-orange-400 to-pink-600",
+  theme:
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/arta.min.css",
+},
+twilight: {
+  background: "bg-gradient-to-br from-purple-600 to-indigo-900",
+  theme:
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css",
+},
+midnight: {
+  background: "bg-gradient-to-br from-blue-900 to-black",
+  theme:
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/obsidian.min.css",
+},
+dawn: {
+  background: "bg-gradient-to-br from-yellow-200 to-pink-400",
+  theme:
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/solarized-light.min.css",
+},
 }
 
 export const fonts = {
@@ -185,7 +211,7 @@ export const codeSnippets = [
   },
   {
     language: "php",
-    code: "<?php\n$fruits = ['apple', 'banana', 'cherry'];\n$uppercased = array_map('strtoupper', $fruits);\nprint_r($uppercased);\n?>",
+    code: "<?php\n$fruits = ['apple', 'banana', 'orange'];\n$uppercased = array_map('strtoupper', $fruits);\nprint_r($uppercased);\n?>",
   },
   {
     language: "go",
@@ -196,3 +222,4 @@ export const codeSnippets = [
     code: 'fn main() {\n  let mut count = 0;\n  loop {\n    println!("Count: {}", count);\n    count += 1;\n    if count > 5 {\n      break;\n    }\n  }\n}',
   },
 ]
+ 
